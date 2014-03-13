@@ -8,15 +8,11 @@ class Mrpt < Formula
 
   depends_on 'cmake' => :build
   depends_on 'wxmac' => 'disable-monolithic'
-
-  def patches
-    # Hacks around OpenGL and GLUT ambiguities by using system installed GLUT headers
-    "https://gist.githubusercontent.com/randvoorhies/9283072/raw/mrpt_osx_glut_patch.diff"
-  end
+  depends_on 'gcc49'
 
   def install
     mkdir 'build' do
-      system "cmake", "..", *std_cmake_args
+      system "cmake", "..", "-DCMAKE_CXX_COMPILER=g++-4.9", "-DCMAKE_C_COMPILER=gcc-4.9", "-DBUILD_XSENS_MT3=OFF", "-DBUILD_XSENS_MT4=OFF", *std_cmake_args
       system "make install"
     end
   end
